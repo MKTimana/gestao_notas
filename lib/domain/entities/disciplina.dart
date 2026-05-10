@@ -13,6 +13,26 @@ class Disciplina {
     this.descricao,
   });
 
+  factory Disciplina.fromJson(Map<String, dynamic> json) {
+    return Disciplina(
+      id: json['id'] as String,
+      nome: json['nome'] as String,
+      codigo: json['codigo'] as String,
+      cargaHoraria: json['cargaHoraria'] as int,
+      descricao: json['descricao'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson(){
+    return{
+      'id': id,
+      'nome': nome,
+      'codigo': codigo,
+      'cargaHoraria': cargaHoraria,
+      'descricao': descricao,
+    };
+  }
+
   Disciplina copyWith({
     String? id,
     String? nome,
