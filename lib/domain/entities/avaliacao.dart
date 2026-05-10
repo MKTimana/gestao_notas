@@ -42,7 +42,7 @@ class Avaliacao {
       disciplinaId: json['disciplinaId'] as String,
       estudanteId: json['estudanteId'] as String,
       tipo: TipoAvaliacao.values.byName(json['tipo'] as String),
-      nota: (json['nota'] as num).toDouble(),
+      nota: json['nota'] == null ? null : (json['nota'] as num).toDouble(),
       notaMaxima: (json['notaMaxima'] as num).toDouble(),
       data: DateTime.parse(json['data'] as String),
     );

@@ -1,39 +1,56 @@
-import 'domain/entities/avaliacao.dart';
-import 'domain/entities/disciplina.dart';
-import 'domain/entities/estudante.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:gestao_notas/core/routes/app_router.dart';
+
+import 'core/routes/route_names.dart';
+import 'data/datasources/json_local_datasource.dart';
+import 'data/repositories/avaliacao_repository_impl.dart';
+import 'data/repositories/disciplina_repository_impl.dart';
+import 'data/repositories/estudante_repository_impl.dart';
+import 'presentation/theme/app_theme.dart';
+import 'presentation/viewmodels/avaliacao_view_model.dart';
+import 'presentation/viewmodels/disciplina_view_model.dart';
+import 'presentation/viewmodels/estudante_view_model.dart';
 
 void main() {
-  // Criando objectos para validar as entities
-  final estudante = Estudante(
-    id: '1',
-    nome: 'Ana Machava',
-    numero: '20250001',
-    email: null,          // permitido — é nullable
+  // Datasource partilhado — uma só instância para toda a app
+  final datasource = JsonLocalDatasource();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => EstudanteViewModel(
+            EstudanteRepositoryImpl(datasource),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DisciplinaViewModel(
+            DisciplinaRepositoryImpl(datasource),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AvaliacaoViewModel(
+            AvaliacaoRepositoryImpl(datasource),
+          ),
+        ),
+      ],
+      child: const GestaoNotasApp(),
+    ),
   );
+}
 
-  final disciplina = Disciplina(
-    id: '1',
-    nome: 'Programação de Dispositivos Móveis',
-    codigo: 'PDM-2025',
-    cargaHoraria: 60,
-  );
+class GestaoNotasApp extends StatelessWidget {
+  const GestaoNotasApp({super.key});
 
-  final avaliacao = Avaliacao(
-    id: '1',
-    disciplinaId: disciplina.id,
-    estudanteId: estudante.id,
-    tipo: TipoAvaliacao.teste,
-    notaMaxima: 20.0,
-    data: DateTime.now(),
-    // nota não atribuída ainda
-  );
-
-  print(estudante.emailOuPadrao);      // sem.email@isutc.ac.mz
-  print(avaliacao.temNota);            // false
-  print(avaliacao.classificacao);      // Por avaliar
-
-  // Atribuindo nota com copyWith — SEM mutar o objecto original
-  final avaliacaoComNota = avaliacao.copyWith(nota: 17.5);
-  print(avaliacaoComNota.percentagem); // 87.5
-  print(avaliacaoComNota.classificacao); // Bom
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Gestão de Notas',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      initialRoute: RouteNames.splash,
+      onGenerateRoute: AppRouter.onGenerateRoute,
+    );
+  }
 }
