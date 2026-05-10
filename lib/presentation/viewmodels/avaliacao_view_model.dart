@@ -41,12 +41,32 @@ class AvaliacaoViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> carregarAvaliacoes() async {
+    await _executar(() async {
+      _avaliacoes = await _repository.listarAvaliacao();
+    });
+  }
+
+  Future<void> carregarPorEstudante(String estudanteId) async {
+    await _executar(() async {
+      _avaliacoes = await _repository.listarPorEstudante(estudanteId);
+    });
+  }
+
   Future<void> atribuirNota({
     required String avaliacaoId,
     required double nota,
   }) async {
     await _executar(() async {
-      final actual = _avaliacoes.firstWhere((a) => a.id == avaliacaoId);
+      final actual = _avaliacoes.firstWhere(
+        (a) => a.id == avaliacaoId,
+        orElse: () {
+          throw AppExceptions(
+            msg: 'Avaliação não encontrada na lista actual.',
+            codigo: 'AVALIACAO_NAO_CARREGADA',
+          );
+        },
+      );
 
       final actualizada = actual.copyWith(nota: nota);
 
@@ -85,14 +105,18 @@ class AvaliacaoViewModel extends ChangeNotifier {
     required String disciplinaId,
   }) async {
     await _executar(() async {
-      _mediaActual = await _repository.calcularMedia(
-        estudanteId,
-        disciplinaId,
-      );
+      _mediaActual = await _repository.calcularMedia(estudanteId, disciplinaId);
     });
   }
 
-  Future<void> removerAvaliacao(String id, String disciplinaId) async {
+  Future<void> actualizarAvaliacao(Avaliacao avaliacao) async {
+    await _executar(() async {
+      await _repository.actualizarAvaliacao(avaliacao);
+      _avaliacoes = await _repository.listarAvaliacao();
+    });
+  }
+
+  Future<void> removerAvaliacao(String id) async {
     await _executar(() async {
       await _repository.removerAvaliacao(id);
       _avaliacoes = _avaliacoes.where((a) => a.id != id).toList();

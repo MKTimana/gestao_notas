@@ -21,9 +21,9 @@ class AppRouter {
   static PageRoute _fadeRoute(Widget page, RouteSettings settings) {
     return PageRouteBuilder(
       settings: settings,
-      pageBuilder: (_, __, ___) => page,
+      pageBuilder: (_, _, _) => page,
       transitionDuration: const Duration(milliseconds: 400),
-      transitionsBuilder: (_, animation, __, child) {
+      transitionsBuilder: (_, animation, _, child) {
         return FadeTransition(opacity: animation, child: child);
       },
     );
@@ -33,9 +33,9 @@ class AppRouter {
   static PageRoute _slideRoute(Widget page, RouteSettings settings) {
     return PageRouteBuilder(
       settings: settings,
-      pageBuilder: (_, __, ___) => page,
+      pageBuilder: (_, _, _) => page,
       transitionDuration: const Duration(milliseconds: 300),
-      transitionsBuilder: (_, animation, __, child) {
+      transitionsBuilder: (_, animation, _, child) {
         final tween = Tween(
           begin: const Offset(1.0, 0.0),
           end: Offset.zero,
