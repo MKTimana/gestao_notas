@@ -36,6 +36,30 @@ class Avaliacao {
     }
   }
 
+  factory Avaliacao.fromJson(Map<String, dynamic> json) {
+    return Avaliacao(
+      id: json['id'] as String,
+      disciplinaId: json['disciplinaId'] as String,
+      estudanteId: json['estudanteId'] as String,
+      tipo: TipoAvaliacao.values.byName(json['tipo'] as String),
+      nota: (json['nota'] as num).toDouble(),
+      notaMaxima: (json['notaMaxima'] as num).toDouble(),
+      data: DateTime.parse(json['data'] as String),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'disciplinaId': disciplinaId,
+      'estudanteId': estudanteId,
+      'tipo': tipo.name,
+      'nota': nota,
+      'notaMaxima': notaMaxima,
+      'data': data.toIso8601String(),
+    };
+  }
+
   Avaliacao copyWith({
     String? id,
     String? disciplinaId,

@@ -13,6 +13,24 @@ class Estudante {
 
   String get emailOuPadrao => email ?? 'sem.email@isutc.co.mz';
 
+  factory Estudante.fromJson(Map<String, dynamic> json) {
+    return Estudante(
+      id: json['id'] as String,
+      nome: json['nome'] as String,
+      numero: json['numero'] as String,
+      email: json['email'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson(){
+    return{
+      'id': id,
+      'nome':nome ,
+      'numero': numero,
+      'email': email,
+    };
+  }
+
   Estudante copyWith({
     String? id,
     String? nome,
