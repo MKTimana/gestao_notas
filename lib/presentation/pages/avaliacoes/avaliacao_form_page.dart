@@ -7,6 +7,7 @@ import '../../../domain/entities/estudante.dart';
 import '../../viewmodels/avaliacao_view_model.dart';
 import '../../viewmodels/disciplina_view_model.dart';
 import '../../viewmodels/estudante_view_model.dart';
+import '../../viewmodels/inscricao_view_model.dart';
 import '../../viewmodels/view_state.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
@@ -50,9 +51,7 @@ class _AvaliacaoFormPageState extends State<AvaliacaoFormPage> {
 
     if (_estudanteSelecionado == null || _disciplinaSelecionada == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Seleccione estudante e disciplina.'),
-        ),
+        const SnackBar(content: Text('Seleccione estudante e disciplina.')),
       );
       return;
     }
@@ -73,6 +72,23 @@ class _AvaliacaoFormPageState extends State<AvaliacaoFormPage> {
     }
 
     final viewModel = context.read<AvaliacaoViewModel>();
+    final inscricaoVM = context.read<InscricaoViewModel>();
+
+    final estaInscrito = await inscricaoVM.estudanteEstaInscrito(
+      estudanteId: _estudanteSelecionado!.id,
+      disciplinaId: _disciplinaSelecionada!.id,
+    );
+
+    if (!estaInscrito) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Este estudante não está inscrito nesta disciplina.'),
+        ),
+      );
+      return;
+    }
 
     await viewModel.criarAvaliacao(
       disciplinaId: _disciplinaSelecionada!.id,
@@ -98,9 +114,7 @@ class _AvaliacaoFormPageState extends State<AvaliacaoFormPage> {
     final isLoading = avaliacaoVM.state.status == ViewStatus.carregando;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nova avaliação'),
-      ),
+      appBar: AppBar(title: const Text('Nova avaliação')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(

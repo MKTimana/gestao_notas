@@ -16,7 +16,7 @@ abstract class RouteNames {
 
   // Médias
   static const String mediasList = '/medias';
-
+  
   // Avaliações
   static const String avaliacoesList = '/avaliacoes';
   static const String avaliacoesCreate = '/avaliacoes/create';
@@ -24,4 +24,7 @@ abstract class RouteNames {
   // Notas
   static const String notasList = '/notas';
   static const String notasAtribuir = '/notas/atribuir';
+
+  // Inscrições
+  static const String inscricoesList = '/inscricoes';
 }

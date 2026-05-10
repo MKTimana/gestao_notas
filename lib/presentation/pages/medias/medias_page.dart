@@ -34,16 +34,15 @@ class _MediasPageState extends State<MediasPage> {
     final disciplinaVM = context.watch<DisciplinaViewModel>();
 
     if (avaliacaoVM.state.status == ViewStatus.carregando) {
-      return const Scaffold(
-        body: LoadingWidget(message: 'A calcular médias...'),
+      return Scaffold(
+        appBar: AppBar(title: const Text('Médias')),
+        body: const LoadingWidget(message: 'A calcular médias...'),
       );
     }
 
     if (avaliacaoVM.avaliacoes.isEmpty) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Médias'),
-        ),
+        appBar: AppBar(title: const Text('Médias')),
         body: const EmptyStateWidget(
           icon: Icons.analytics_outlined,
           title: 'Sem avaliações',
@@ -57,8 +56,9 @@ class _MediasPageState extends State<MediasPage> {
         .toList();
 
     if (avaliacoesComNota.isEmpty) {
-      return const Scaffold(
-        body: EmptyStateWidget(
+      return Scaffold(
+        appBar: AppBar(title: const Text('Médias')),
+        body: const EmptyStateWidget(
           icon: Icons.grade_outlined,
           title: 'Sem notas atribuídas',
           subtitle: 'Atribua notas antes de consultar as médias.',

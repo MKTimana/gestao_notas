@@ -7,32 +7,34 @@ import 'data/datasources/json_local_datasource.dart';
 import 'data/repositories/avaliacao_repository_impl.dart';
 import 'data/repositories/disciplina_repository_impl.dart';
 import 'data/repositories/estudante_repository_impl.dart';
+import 'data/repositories/inscricao_repository_impl.dart';
 import 'presentation/theme/app_theme.dart';
 import 'presentation/viewmodels/avaliacao_view_model.dart';
 import 'presentation/viewmodels/disciplina_view_model.dart';
 import 'presentation/viewmodels/estudante_view_model.dart';
+import 'presentation/viewmodels/inscricao_view_model.dart';
 
 void main() {
-  // Datasource partilhado — uma só instância para toda a app
   final datasource = JsonLocalDatasource();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => EstudanteViewModel(
-            EstudanteRepositoryImpl(datasource),
-          ),
+          create: (_) =>
+              EstudanteViewModel(EstudanteRepositoryImpl(datasource)),
         ),
         ChangeNotifierProvider(
-          create: (_) => DisciplinaViewModel(
-            DisciplinaRepositoryImpl(datasource),
-          ),
+          create: (_) =>
+              DisciplinaViewModel(DisciplinaRepositoryImpl(datasource)),
         ),
         ChangeNotifierProvider(
-          create: (_) => AvaliacaoViewModel(
-            AvaliacaoRepositoryImpl(datasource),
-          ),
+          create: (_) =>
+              AvaliacaoViewModel(AvaliacaoRepositoryImpl(datasource)),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              InscricaoViewModel(InscricaoRepositoryImpl(datasource)),
         ),
       ],
       child: const GestaoNotasApp(),

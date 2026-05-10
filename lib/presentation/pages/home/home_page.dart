@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Gere estudantes, disciplinas e avaliações',
+            'Faça a gestão dos estudantes, disciplinas e avaliações',
             style: AppTextStyles.bodyMedium.copyWith(
               color: Colors.white.withOpacity(0.85),
             ),
@@ -91,6 +91,14 @@ class HomePage extends StatelessWidget {
         route: RouteNames.avaliacoesList,
       ),
       _ModuleItem(
+        title: 'Inscrições',
+        subtitle: 'Inscrever estudantes em disciplinas',
+        icon: Icons.how_to_reg_outlined,
+        color: AppColors.inscricaoColor,
+        lightColor: AppColors.inscricaoColorLight,
+        route: RouteNames.inscricoesList,
+      ),
+      _ModuleItem(
         title: 'Notas',
         subtitle: 'Resultados e médias',
         icon: Icons.grade_rounded,
@@ -102,8 +110,8 @@ class HomePage extends StatelessWidget {
         title: 'Médias',
         subtitle: 'Consultar médias dos estudantes',
         icon: Icons.analytics_outlined,
-        color: AppColors.textSecondary,
-        lightColor: AppColors.notaColorLight,
+        color: AppColors.mediasColor,
+        lightColor: AppColors.mediasColorLight,
         route: RouteNames.mediasList,
       ),
     ];

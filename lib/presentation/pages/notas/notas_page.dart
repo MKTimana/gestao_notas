@@ -17,6 +17,8 @@ class NotasPage extends StatefulWidget {
 }
 
 class _NotasPageState extends State<NotasPage> {
+  String? _disciplinaSelecionadaId;
+
   @override
   void initState() {
     super.initState();
@@ -30,92 +32,153 @@ class _NotasPageState extends State<NotasPage> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<AvaliacaoViewModel>();
-    final estudanteVM = context.watch<EstudanteViewModel>();
+    final avaliacaoVM = context.watch<AvaliacaoViewModel>();
     final disciplinaVM = context.watch<DisciplinaViewModel>();
+    final estudanteVM = context.watch<EstudanteViewModel>();
+
+    final avaliacoesFiltradas = _disciplinaSelecionadaId == null
+        ? avaliacaoVM.avaliacoes
+        : avaliacaoVM.avaliacoes
+              .where(
+                (avaliacao) =>
+                    avaliacao.disciplinaId == _disciplinaSelecionadaId,
+              )
+              .toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Notas')),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     Navigator.of(context).pushNamed(RouteNames.notasAtribuir);
-      //   },
-      //   icon: const Icon(Icons.edit_note),
-      //   label: const Text('Atribuir'),
-      // ),
-      body: Builder(
-        builder: (_) {
-          if (viewModel.state.status == ViewStatus.carregando) {
-            return const LoadingWidget(message: 'A carregar notas...');
-          }
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Builder(
+          builder: (_) {
+            if (avaliacaoVM.state.status == ViewStatus.carregando) {
+              return const LoadingWidget(message: 'A carregar notas...');
+            }
 
-          if (viewModel.state.temErro) {
-            return Center(
-              child: Text(
-                viewModel.state.mensagemErro ?? 'Erro ao carregar dados',
-              ),
-            );
-          }
-
-          if (viewModel.avaliacoes.isEmpty) {
-            return EmptyStateWidget(
-              icon: Icons.grade_outlined,
-              title: 'Ainda não existem notas',
-              subtitle:
-                  'Crie avaliações e depois atribua notas aos estudantes.',
-              actionLabel: 'Atribuir nota',
-              onAction: () {
-                Navigator.of(context).pushNamed(RouteNames.notasAtribuir);
-              },
-            );
-          }
-
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: viewModel.avaliacoes.length,
-            itemBuilder: (context, index) {
-              final avaliacao = viewModel.avaliacoes[index];
-              final estudante = estudanteVM.estudantes
-                  .where((e) => e.id == avaliacao.estudanteId)
-                  .firstOrNull;
-
-              final disciplina = disciplinaVM.disciplinas
-                  .where((d) => d.id == avaliacao.disciplinaId)
-                  .firstOrNull;
-
-              return Card(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Text(
-                      avaliacao.temNota
-                          ? avaliacao.nota!.toStringAsFixed(0)
-                          : '-',
-                    ),
-                  ),
-                  title: Text(
-                    '${estudante?.nome ?? 'Estudante não encontrado'}',
-                  ),
-                  subtitle: Text(
-                    '${disciplina?.nome ?? 'Disciplina não encontrada'}\n'
-                    '${avaliacao.tipo.name.toUpperCase()} • ${avaliacao.classificacao}',
-                  ),
-                  isThreeLine: true,
-                  trailing: Text(
-                    avaliacao.temNota
-                        ? '${avaliacao.percentagem.toStringAsFixed(1)}%'
-                        : 'Pendente',
-                  ),
-                  onTap: () {
-                    Navigator.of(
-                      context,
-                    ).pushNamed(RouteNames.notasAtribuir, arguments: avaliacao);
-                  },
+            if (avaliacaoVM.state.temErro) {
+              return Center(
+                child: Text(
+                  avaliacaoVM.state.mensagemErro ?? 'Erro ao carregar dados',
                 ),
               );
-            },
-          );
-        },
+            }
+
+            if (avaliacaoVM.avaliacoes.isEmpty) {
+              return EmptyStateWidget(
+                icon: Icons.grade_outlined,
+                title: 'Ainda não existem notas',
+                subtitle:
+                    'Crie avaliações e depois atribua notas aos estudantes.',
+                actionLabel: 'Criar avaliação',
+                onAction: () {
+                  Navigator.of(context).pushNamed(RouteNames.avaliacoesCreate);
+                },
+              );
+            }
+
+            return Column(
+              children: [
+                DropdownButtonFormField<String?>(
+                  value: _disciplinaSelecionadaId,
+                  decoration: const InputDecoration(
+                    labelText: 'Filtrar por disciplina',
+                    prefixIcon: Icon(Icons.book_outlined),
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    const DropdownMenuItem<String?>(
+                      value: null,
+                      child: Text('Todas as disciplinas'),
+                    ),
+                    ...disciplinaVM.disciplinas.map((disciplina) {
+                      return DropdownMenuItem<String?>(
+                        value: disciplina.id,
+                        child: Text(disciplina.nome),
+                      );
+                    }),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _disciplinaSelecionadaId = value;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                if (avaliacoesFiltradas.isEmpty)
+                  const Expanded(
+                    child: Center(
+                      child: Text(
+                        'Nenhuma nota encontrada para esta disciplina.',
+                      ),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: avaliacoesFiltradas.length,
+                      itemBuilder: (context, index) {
+                        final avaliacao = avaliacoesFiltradas[index];
+
+                        final estudante = firstWhereOrNull(
+                          estudanteVM.estudantes,
+                          (e) => e.id == avaliacao.estudanteId,
+                        );
+
+                        final disciplina = firstWhereOrNull(
+                          disciplinaVM.disciplinas,
+                          (d) => d.id == avaliacao.disciplinaId,
+                        );
+
+                        return Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              child: Text(
+                                avaliacao.temNota
+                                    ? avaliacao.nota!.toStringAsFixed(0)
+                                    : '-',
+                              ),
+                            ),
+                            title: Text(
+                              estudante?.nome ?? 'Estudante não encontrado',
+                            ),
+                            subtitle: Text(
+                              '${disciplina?.nome ?? 'Disciplina não encontrada'}\n'
+                              '${avaliacao.tipo.name.toUpperCase()} • ${avaliacao.classificacao}',
+                            ),
+                            isThreeLine: true,
+                            trailing: Text(
+                              avaliacao.temNota
+                                  ? '${avaliacao.percentagem.toStringAsFixed(1)}%'
+                                  : 'Pendente',
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                RouteNames.notasAtribuir,
+                                arguments: avaliacao,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
+}
+
+T? firstWhereOrNull<T>(List<T> items, bool Function(T item) test) {
+  for (final item in items) {
+    if (test(item)) {
+      return item;
+    }
+  }
+
+  return null;
 }

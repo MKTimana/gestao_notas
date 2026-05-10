@@ -43,4 +43,8 @@ abstract class AppColors {
   static const Color avaliacaoColorLight = Color(0xFFFEF3CD);
   static const Color notaColor = Color(0xFFEA4335);
   static const Color notaColorLight = Color(0xFFFCE8E6);
+  static const Color inscricaoColor = Color(0xFF7C3AED); // roxo
+  static const Color inscricaoColorLight = Color(0xFFEDE9FE);
+  static const Color mediasColor = Color(0xFF0891B2); // ciano
+  static const Color mediasColorLight = Color(0xFFCFFAFE);
 }
