@@ -9,6 +9,7 @@ import '../../presentation/pages/disciplinas/disciplinas_page.dart';
 import '../../presentation/pages/estudantes/estudante_form_page.dart';
 import '../../presentation/pages/estudantes/estudantes_page.dart';
 import '../../presentation/pages/home/home_page.dart';
+import '../../presentation/pages/medias/medias_page.dart';
 import '../../presentation/pages/notas/atribuir_nota_page.dart';
 import '../../presentation/pages/notas/notas_page.dart';
 import '../../presentation/pages/splash/splash_page.dart';
@@ -66,6 +67,9 @@ class AppRouter {
         }
 
         return _slideRoute(AtribuirNotaPage(avaliacao: avaliacao), settings);
+
+      case RouteNames.mediasList:
+        return _slideRoute(const MediasPage(), settings);
 
       default:
         return _fadeRoute(_notFoundPage(settings.name), settings);

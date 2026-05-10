@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/routes/route_names.dart';
 import '../../viewmodels/estudante_view_model.dart';
 import '../../viewmodels/view_state.dart';
+import '../../widgets/confirm_dialog.dart';
 import '../../widgets/empty_state_widget.dart';
 import '../../widgets/loading_widget.dart';
 
@@ -76,7 +77,31 @@ class _EstudantesPageState extends State<EstudantesPage> {
                     'N.º ${estudante.numero}\n${estudante.emailOuPadrao}',
                   ),
                   isThreeLine: true,
-                  trailing: const Icon(Icons.chevron_right),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () async {
+                      final confirmar = await showConfirmDialog(
+                        context: context,
+                        title: 'Eliminar estudante',
+                        message:
+                            'Tem certeza que deseja eliminar ${estudante.nome}?',
+                      );
+
+                      if (!confirmar) return;
+
+                      await context.read<EstudanteViewModel>().removerEstudante(
+                        estudante.id,
+                      );
+
+                      if (!context.mounted) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Estudante eliminado com sucesso.'),
+                        ),
+                      );
+                    },
+                  ),
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       RouteNames.estudantesEdit,

@@ -3,7 +3,6 @@ import '../../../../core/routes/route_names.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
 
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -11,9 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Gestão de Notas'),
-        actions: [
+      appBar: AppBar(title: const Text('Gestão de Notas'), actions: [
         ],
       ),
       body: SafeArea(
@@ -101,6 +98,14 @@ class HomePage extends StatelessWidget {
         lightColor: AppColors.notaColorLight,
         route: RouteNames.notasList,
       ),
+      _ModuleItem(
+        title: 'Médias',
+        subtitle: 'Consultar médias dos estudantes',
+        icon: Icons.analytics_outlined,
+        color: AppColors.textSecondary,
+        lightColor: AppColors.notaColorLight,
+        route: RouteNames.mediasList,
+      ),
     ];
 
     return Column(
@@ -133,7 +138,8 @@ class HomePage extends StatelessWidget {
           iconBgColor: AppColors.estudanteColorLight,
           title: 'Novo estudante',
           subtitle: 'Registar um novo estudante',
-          onTap: () => Navigator.of(context).pushNamed(RouteNames.estudantesCreate),
+          onTap: () =>
+              Navigator.of(context).pushNamed(RouteNames.estudantesCreate),
         ),
         _QuickActionTile(
           icon: Icons.library_add_rounded,
@@ -141,7 +147,8 @@ class HomePage extends StatelessWidget {
           iconBgColor: AppColors.disciplinaColorLight,
           title: 'Nova disciplina',
           subtitle: 'Criar uma nova disciplina',
-          onTap: () => Navigator.of(context).pushNamed(RouteNames.disciplinasCreate),
+          onTap: () =>
+              Navigator.of(context).pushNamed(RouteNames.disciplinasCreate),
         ),
         _QuickActionTile(
           icon: Icons.edit_note_rounded,

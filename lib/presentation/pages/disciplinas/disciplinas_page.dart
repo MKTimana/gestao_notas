@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/routes/route_names.dart';
 import '../../viewmodels/disciplina_view_model.dart';
 import '../../viewmodels/view_state.dart';
+import '../../widgets/confirm_dialog.dart';
 import '../../widgets/empty_state_widget.dart';
 import '../../widgets/loading_widget.dart';
 
@@ -75,7 +76,31 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
                   subtitle: Text(
                     '${disciplina.codigo} • ${disciplina.cargaHoraria}h',
                   ),
-                  trailing: const Icon(Icons.chevron_right),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () async {
+                      final confirmar = await showConfirmDialog(
+                        context: context,
+                        title: 'Eliminar disciplina',
+                        message:
+                            'Tem certeza que deseja eliminar ${disciplina.nome}?',
+                      );
+
+                      if (!confirmar) return;
+
+                      await context
+                          .read<DisciplinaViewModel>()
+                          .removerDisciplina(disciplina.id);
+
+                      if (!context.mounted) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Disciplina eliminada com sucesso.'),
+                        ),
+                      );
+                    },
+                  ),
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       RouteNames.disciplinasEdit,
