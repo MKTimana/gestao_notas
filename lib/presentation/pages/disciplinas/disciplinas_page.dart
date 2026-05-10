@@ -29,9 +29,7 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
     final viewModel = context.watch<DisciplinaViewModel>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Disciplinas'),
-      ),
+      appBar: AppBar(title: const Text('Disciplinas')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed(RouteNames.disciplinasCreate);
@@ -46,7 +44,9 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
 
           if (viewModel.state.temErro) {
             return Center(
-              child: Text(viewModel.state.mensagemErro ?? 'Erro ao carregar dados'),
+              child: Text(
+                viewModel.state.mensagemErro ?? 'Erro ao carregar dados',
+              ),
             );
           }
 
@@ -70,9 +70,7 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
 
               return Card(
                 child: ListTile(
-                  leading: const CircleAvatar(
-                    child: Icon(Icons.book),
-                  ),
+                  leading: const CircleAvatar(child: Icon(Icons.book)),
                   title: Text(disciplina.nome),
                   subtitle: Text(
                     '${disciplina.codigo} • ${disciplina.cargaHoraria}h',
@@ -80,7 +78,7 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     Navigator.of(context).pushNamed(
-                      RouteNames.disciplinasDetail,
+                      RouteNames.disciplinasEdit,
                       arguments: disciplina,
                     );
                   },

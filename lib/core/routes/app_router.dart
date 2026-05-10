@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import '../../domain/entities/avaliacao.dart';
+import '../../domain/entities/disciplina.dart';
+import '../../domain/entities/estudante.dart';
+import '../../presentation/pages/avaliacoes/avaliacao_form_page.dart';
 import '../../presentation/pages/avaliacoes/avaliacoes_page.dart';
+import '../../presentation/pages/disciplinas/disciplina_form_page.dart';
 import '../../presentation/pages/disciplinas/disciplinas_page.dart';
+import '../../presentation/pages/estudantes/estudante_form_page.dart';
 import '../../presentation/pages/estudantes/estudantes_page.dart';
 import '../../presentation/pages/home/home_page.dart';
+import '../../presentation/pages/notas/atribuir_nota_page.dart';
 import '../../presentation/pages/notas/notas_page.dart';
 import '../../presentation/pages/splash/splash_page.dart';
 import 'route_names.dart';
@@ -27,6 +34,38 @@ class AppRouter {
 
       case RouteNames.notasList:
         return _slideRoute(const NotasPage(), settings);
+
+      case RouteNames.estudantesCreate:
+        return _slideRoute(const EstudanteFormPage(), settings);
+
+      case RouteNames.estudantesEdit:
+        final estudante = settings.arguments as Estudante?;
+        return _slideRoute(EstudanteFormPage(estudante: estudante), settings);
+
+      case RouteNames.disciplinasCreate:
+        return _slideRoute(const DisciplinaFormPage(), settings);
+
+      case RouteNames.disciplinasEdit:
+        final disciplina = settings.arguments as Disciplina?;
+        return _slideRoute(
+          DisciplinaFormPage(disciplina: disciplina),
+          settings,
+        );
+
+      case RouteNames.avaliacoesCreate:
+        return _slideRoute(const AvaliacaoFormPage(), settings);
+
+      case RouteNames.notasAtribuir:
+        final avaliacao = settings.arguments as Avaliacao?;
+
+        if (avaliacao == null) {
+          return _slideRoute(
+            _notFoundPage('Avaliação não enviada para atribuição de nota'),
+            settings,
+          );
+        }
+
+        return _slideRoute(AtribuirNotaPage(avaliacao: avaliacao), settings);
 
       default:
         return _fadeRoute(_notFoundPage(settings.name), settings);

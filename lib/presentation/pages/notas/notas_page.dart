@@ -32,13 +32,13 @@ class _NotasPageState extends State<NotasPage> {
       appBar: AppBar(
         title: const Text('Notas'),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).pushNamed(RouteNames.notasAtribuir);
-        },
-        icon: const Icon(Icons.edit_note),
-        label: const Text('Atribuir'),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //     Navigator.of(context).pushNamed(RouteNames.notasAtribuir);
+      //   },
+      //   icon: const Icon(Icons.edit_note),
+      //   label: const Text('Atribuir'),
+      // ),
       body: Builder(
         builder: (_) {
           if (viewModel.state.status == ViewStatus.carregando) {

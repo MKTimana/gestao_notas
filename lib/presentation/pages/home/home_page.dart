@@ -14,11 +14,6 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Gestão de Notas'),
         actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.info_outline_rounded),
-          //   tooltip: 'Sobre',
-          //   onPressed: () => _showAboutDialog(context),
-          // ),
         ],
       ),
       body: SafeArea(
@@ -154,29 +149,11 @@ class HomePage extends StatelessWidget {
           iconBgColor: AppColors.avaliacaoColorLight,
           title: 'Atribuir notas',
           subtitle: 'Lançar resultados de avaliação',
-          onTap: () => Navigator.of(context).pushNamed(RouteNames.notasAtribuir),
+          onTap: () => Navigator.of(context).pushNamed(RouteNames.notasList),
         ),
       ],
     );
   }
-
-  // void _showAboutDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) => AlertDialog(
-  //       title: const Text('Sobre'),
-  //       content: const Text(
-  //         'Aplicação de Gestão de Notas\nDesenvolvida com Flutter e Clean Architecture.',
-  //       ),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(),
-  //           child: const Text('Fechar'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
 
 // ── Modelos internos ───────────────────────────────────────────────────────────

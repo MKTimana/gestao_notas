@@ -29,9 +29,7 @@ class _EstudantesPageState extends State<EstudantesPage> {
     final viewModel = context.watch<EstudanteViewModel>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Estudantes'),
-      ),
+      appBar: AppBar(title: const Text('Estudantes')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed(RouteNames.estudantesCreate);
@@ -46,7 +44,9 @@ class _EstudantesPageState extends State<EstudantesPage> {
 
           if (viewModel.state.temErro) {
             return Center(
-              child: Text(viewModel.state.mensagemErro ?? 'Erro ao carregar dados'),
+              child: Text(
+                viewModel.state.mensagemErro ?? 'Erro ao carregar dados',
+              ),
             );
           }
 
@@ -70,9 +70,7 @@ class _EstudantesPageState extends State<EstudantesPage> {
 
               return Card(
                 child: ListTile(
-                  leading: const CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
+                  leading: const CircleAvatar(child: Icon(Icons.person)),
                   title: Text(estudante.nome),
                   subtitle: Text(
                     'N.º ${estudante.numero}\n${estudante.emailOuPadrao}',
