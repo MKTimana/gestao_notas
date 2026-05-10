@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../presentation/pages/avaliacoes/avaliacoes_page.dart';
+import '../../presentation/pages/disciplinas/disciplinas_page.dart';
+import '../../presentation/pages/estudantes/estudantes_page.dart';
 import '../../presentation/pages/home/home_page.dart';
+import '../../presentation/pages/notas/notas_page.dart';
 import '../../presentation/pages/splash/splash_page.dart';
 import 'route_names.dart';
 
@@ -11,6 +15,18 @@ class AppRouter {
 
       case RouteNames.home:
         return _slideRoute(const HomePage(), settings);
+
+      case RouteNames.estudantesList:
+        return _slideRoute(const EstudantesPage(), settings);
+
+      case RouteNames.disciplinasList:
+        return _slideRoute(const DisciplinasPage(), settings);
+
+      case RouteNames.avaliacoesList:
+        return _slideRoute(const AvaliacoesPage(), settings);
+
+      case RouteNames.notasList:
+        return _slideRoute(const NotasPage(), settings);
 
       default:
         return _fadeRoute(_notFoundPage(settings.name), settings);
@@ -40,10 +56,7 @@ class AppRouter {
           begin: const Offset(1.0, 0.0),
           end: Offset.zero,
         ).chain(CurveTween(curve: Curves.easeOutCubic));
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
     );
   }
