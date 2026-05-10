@@ -12,11 +12,10 @@ abstract class RouteNames {
   static const String disciplinasList = '/disciplinas';
   static const String disciplinasCreate = '/disciplinas/create';
   static const String disciplinasEdit = '/disciplinas/edit';
-  static const String disciplinasDetail = '/disciplinas/detail';
 
   // Médias
   static const String mediasList = '/medias';
-  
+
   // Avaliações
   static const String avaliacoesList = '/avaliacoes';
   static const String avaliacoesCreate = '/avaliacoes/create';

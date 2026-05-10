@@ -82,8 +82,6 @@ class _AvaliacoesPageState extends State<AvaliacoesPage> {
                   .where((d) => d.id == avaliacao.disciplinaId)
                   .firstOrNull;
 
-                  
-
               return Card(
                 child: ListTile(
                   leading: const CircleAvatar(child: Icon(Icons.assignment)),
